@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.deli.models.customer.AuthenticationDTO;
 import com.deli.models.customer.Customer;
+import com.deli.models.customer.LoginResponseDTO;
 import com.deli.models.customer.RegisterDTO;
 import com.deli.repository.CustomerRepository;
+import com.deli.service.TokenService;
 
 import jakarta.validation.Valid;
 
@@ -28,13 +30,19 @@ public class AuthController {
     @Autowired
     private CustomerRepository customerRepository;
 
+    @Autowired
+    private TokenService tokenService;
+
     @PostMapping("/login")
     public ResponseEntity<?> loginCustomer(@RequestBody @Valid AuthenticationDTO data){
         try {
             var customerPassword = new UsernamePasswordAuthenticationToken(data.email(), data.password());
             System.out.println(customerPassword); 
             var auth = this.authenticationManager.authenticate(customerPassword);
-            return ResponseEntity.ok().body("Autenticado com sucesso"); 
+
+            var token = tokenService.generateToken((Customer) auth.getPrincipal());
+
+            return ResponseEntity.ok(new LoginResponseDTO(token)); 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Falha em autenticar");
         }
