@@ -1,13 +1,13 @@
-package com.deli.models.customer;
+package com.deli.models.user;
 
-public enum CustomerRole {
+public enum UserRole {
     
     ADMIN("admin"),
     USER("user");
 
     private String role;
 
-    CustomerRole(String role){
+    UserRole(String role){
         this.role = role;
     }
 

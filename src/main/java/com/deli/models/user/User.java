@@ -1,4 +1,4 @@
-package com.deli.models.customer;
+package com.deli.models.user;
 
 import java.util.Collection;
 import java.util.List;
@@ -15,10 +15,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="Customer")
-public class Customer implements UserDetails{
+@Table(name="User")
+public class User implements UserDetails{
 
-    //Getters and setters for customer
+    //Getters and setters for User
     ////#Region attributes
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,21 +30,18 @@ public class Customer implements UserDetails{
     private String email;
     @Column(name="password", nullable = false)
     private String password;
-    @Column(name="phone", unique = true, nullable = false)
-    private String phone;
     @Column(name="role")
-    private CustomerRole role;
+    private UserRole role;
     ////#endregion
 
-    public Customer(){
+    public User(){
         
     }
 
-    public Customer(String name, String email, String password, String phone){
+    public User(String name, String email, String password){
         this.name = name;
         this.email = email;
         this.password = password;
-        this.phone = phone;
     }
 
     /**
@@ -94,7 +91,7 @@ public class Customer implements UserDetails{
      */
     public String getPassword() {
         return password;
-    }
+    } 
 
     /**
      * @param password the password to set
@@ -103,23 +100,10 @@ public class Customer implements UserDetails{
         this.password = password;
     }
 
-    /**
-     * @return String return the phone
-     */
-    public String getPhone() {
-        return phone;
-    }
-
-    /**
-     * @param phone the phone to set
-     */
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if(this.role == CustomerRole.ADMIN) return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"),
+        if(this.role == UserRole.ADMIN) return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"),
         new SimpleGrantedAuthority("ROLE_USER"));
         else return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }

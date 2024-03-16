@@ -11,7 +11,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.deli.models.customer.Customer;
+import com.deli.models.user.User;
 
 @Service
 public class TokenService {
@@ -19,13 +19,13 @@ public class TokenService {
     @Value("${api.security.token.secret}")
     private String secret;
     
-    public String generateToken(Customer customer){
+    public String generateToken(User user){
 
         try{
             Algorithm algorithm = Algorithm.HMAC256(secret);
             String token = JWT.create()
                             .withIssuer("auth_api")
-                            .withSubject(customer.getEmail())
+                            .withSubject(user.getEmail())
                             .withExpiresAt(genExpirationDate())
                             .sign(algorithm);
             return token;
